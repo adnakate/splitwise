@@ -10,10 +10,41 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_02_23_095330) do
+ActiveRecord::Schema.define(version: 2024_02_24_075236) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "expense_contributions", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "expense_id"
+    t.float "amount_contributed"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["expense_id"], name: "index_expense_contributions_on_expense_id"
+    t.index ["user_id"], name: "index_expense_contributions_on_user_id"
+  end
+
+  create_table "expenses", force: :cascade do |t|
+    t.float "total_amount"
+    t.text "description"
+    t.bigint "payer_id"
+    t.string "expense_type"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "contribution_type"
+    t.index ["payer_id"], name: "index_expenses_on_payer_id"
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.float "amount"
+    t.bigint "sender_id"
+    t.bigint "receiver_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["receiver_id"], name: "index_payments_on_receiver_id"
+    t.index ["sender_id"], name: "index_payments_on_sender_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "provider", default: "email", null: false
@@ -39,4 +70,9 @@ ActiveRecord::Schema.define(version: 2024_02_23_095330) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "expense_contributions", "expenses"
+  add_foreign_key "expense_contributions", "users"
+  add_foreign_key "expenses", "users", column: "payer_id"
+  add_foreign_key "payments", "users", column: "receiver_id"
+  add_foreign_key "payments", "users", column: "sender_id"
 end
