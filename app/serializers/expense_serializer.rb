@@ -1,5 +1,5 @@
 class ExpenseSerializer < ActiveModel::Serializer
-  attributes :id, :description, :expense_type, :contribution_type, :payer_id, :payer_name
+  attributes :id, :description, :expense_type, :contribution_type, :total_amount, :payer_id, :payer_name
 
   def payer_id
     self.object.payer.id
