@@ -5,6 +5,8 @@ class Payment < ApplicationRecord
   belongs_to :sender, class_name: 'User'
   belongs_to :receiver, class_name: 'User'
 
+  paginates_per 10
+
   def create_expense_record
     expense = Expense.create(payer_id: sender_id, total_amount: amount, description: 'Payment',
                              expense_type: 'payment', contribution_type: 'settlement')

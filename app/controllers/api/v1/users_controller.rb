@@ -20,8 +20,11 @@ class Api::V1::UsersController < ApplicationController
     friend = User.where(id: params[:friend_id]).last
     return render json: { errors: 'Invalid friend id' }, status: :unprocessable_entity if !friend.present?
     expenses = friend.list_expenses
+    payments = friend.list_payments
     expenses = expenses.page params[:page]
-    render json: { expenses: ActiveModel::Serializer::CollectionSerializer.new(expenses) }, status: :ok
+    payments = payments.page params[:page]
+    render json: { expenses: ActiveModel::Serializer::CollectionSerializer.new(expenses),
+                   payments: ActiveModel::Serializer::CollectionSerializer.new(payments) }, status: :ok
   end
 
   private

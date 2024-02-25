@@ -1,9 +1,9 @@
 class ExpenseContributionSerializer < ActiveModel::Serializer
-  attributes :id, :amount_contributed, :created_at, :user_id, :user_name
+  attributes :id, :amount_contributed, :date_time, :user_id, :user_name
 
   belongs_to :expense
 
-  def created_at
+  def date_time
     self.object.created_at.strftime("%d/%m/%Y, %H:%M:%S")
   end
 

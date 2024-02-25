@@ -37,6 +37,8 @@ RSpec.describe "Api::V1::Users", type: :request do
       FactoryBot.create(:expense_contribution, user: @user_6, expense: @expense_2, amount_contributed: -1000)
       FactoryBot.create(:expense_contribution, user: @user_5, expense: @expense_3, amount_contributed: -1000)
       FactoryBot.create(:expense_contribution, user: @user_6, expense: @expense_3, amount_contributed: 1000)
+      FactoryBot.create(:payment, sender: @user_5, receiver: @user_6, amount: 1000)
+      FactoryBot.create(:payment, sender: @user_6, receiver: @user_5, amount: 2000)
     end
 
     it "should list friends expenses" do

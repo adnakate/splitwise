@@ -40,7 +40,16 @@ class User < ActiveRecord::Base
   end
 
   def list_expenses
-    expense_contributions.includes(:user, expense: :payer).order('created_at desc')
+    expense_contributions.joins(:expense)
+                         .includes(:user, expense: :payer)
+                         .where.not("expenses.expense_type = ?", 'payment')
+                         .order('created_at desc')
+  end
+
+  def list_payments
+    Payment.includes(:sender, :receiver)
+           .where("sender_id = ? OR receiver_id = ?", id, id)
+           .order('created_at desc')
   end
 
   private
